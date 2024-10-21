@@ -31,70 +31,72 @@ const [topTracks, setTopTracks] = useState([]);
   };
 
   return (
-    <div className="w-full h-full overflow-hidden flex flex-col md:flex-row">
-  <Sidebar />
-  <div className="flex-1 flex flex-col">
-    <div className="bg-custom-gradient1 flex-1 relative p-4 md:p-6">
-      {/* Top Navigation */}
-      <div className="flex gap-6 justify-center md:justify-start mt-4 md:mt-8">
-        <span className="font-poppins font-semibold text-[#E5DDDD] text-lg">Music</span>
-        <span className="font-poppins font-semibold text-[#E5DDDD] text-lg">Podcast</span>
-        <span className="font-poppins font-semibold text-[#E5DDDD] text-lg">Live</span>
-        <span className="font-poppins font-semibold text-[#E5DDDD] text-lg">Radio</span>
-      </div>
+    <div className="w-[1920px] h-[1080px]  overflow-hidden flex">
+       <Sidebar/>
+      <div className='w-[1484px] h-full flex'>
+        <div className='bg-custom-gradient1 w-[1084px] h-full '>
+              <div className='absolute flex  mt-[45px] ml-[83px] w-[368px] h-[27px] gap-[50px] '>
+                <span className='font-poppins font-semibold text-[#E5DDDD] container text-lg'>Music</span>
+                <span className='font-poppins font-semibold text-[#E5DDDD] container text-lg'>Podcast</span>
+                <span className='font-poppins font-semibold text-[#E5DDDD] container text-lg'>Live</span>
+                <span className='font-poppins font-semibold text-[#E5DDDD] container text-lg'>Radio</span>
+               
+              </div>
+              <div className='absolute  mt-[32px] w-[513px] h-[54px] ml-[528px]'>
+                <div className='absolute w-full h-full bg-[#2C0000] rounded-full '>
+                  <div className='absolute ml-[465.42px] w-[22.96px] mt-[14.42px] h-[22.96px] border-[3px] border-[#F6F6F6]'>
+                  <img src={search} alt='search' />
+                  </div>
 
-      {/* Search bar */}
-      <div className="mt-6 md:mt-8 flex justify-center md:justify-end">
-        <div className="relative w-full max-w-md">
-          <input className="w-full bg-[#2C0000] rounded-full pl-4 pr-12 py-2 text-white" placeholder="Search..." />
-          <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
-            <img src={search} alt="search" className="w-6 h-6" />
+                  
+                </div>
+              </div>
+          
+            <div className='absolute bg-zinc-500 w-[882px] h-[452px] ml-[101px] mt-[114px]'>
+              
+            </div>
+            <div className=' w-full h-[447px] ml-0 mt-[606px]'>
+      <div className='w-[266px] h-[36px] ml-[101px]'>
+        <h2 className='text-xl font-semibold'>Top Songs</h2>
+      </div>
+      <div className='ml-[101px] mt-[20px]'>
+        <div className='container  '></div>
+        {topTracks.map((track, index) => (
+          <div
+            key={track.id}
+            className='flex justify-between items-center  p-2 mb-2 rounded-lg cursor-pointer hover:bg-[#520000]'
+            onClick={() => setSelectedTrack(track)}
+          >
+            <span className='font-semi bold hover:text-[#F6F6F6]'>{index + 1}.</span>
+            <img src={track.album.images[0].url} alt={track.name} className='w-12 h-12 rounded-lg' />
+            <div className='flex-1 ml-2'>
+              <p className='font-semibold'>{track.name}</p>
+              <p className='text-gray-600'>{track.artists.map(artist => artist.name).join(', ')}</p>
+            </div>
+            <span>{formatDuration(track.duration_ms)}</span>
+            <span className='text-gray-500'>{track.album.name}</span>
+          </div>
+        ))}
+      </div>
+     
+    </div>
+        </div>
+        <div className='bg-white w-[400px] h-full '>
+          <div className='absolute container border-2 border-[#F6F6F6] bg-black ml-[46px] mt-[43px] w-[284px] h-[267px] ' >
+            <div className='text-[#CFC5C5] flex items-center font-semibold text-sm ml-0 font-poppins mb-1'>
+              <span>NOTIFICATIONS</span>
+            </div>
+          </div>
+          <div className='absolute container border-2 border-[#F6F6F6] bg-green-400 ml-[46px] mt-[345px] w-[284px] h-[293px] '>
+            <div className='text-[#CFC5C5] flex items-center font-semibold text-sm ml-0 font-poppins mb-1'>
+              <span>RECENT PLAYLISTS</span>
+            </div>
+            
+          </div>
+          {selectedTrack && <Songcard track={selectedTrack} />}
           </div>
         </div>
       </div>
-
-      {/* Main content */}
-      <div className="bg-zinc-500 w-full md:w-[80%] h-[300px] md:h-[450px] mx-auto mt-8 md:mt-12 rounded-lg">
-        {/* Content here */}
-      </div>
-
-      {/* Top Songs Section */}
-      <div className="mt-10">
-        <h2 className="text-xl font-semibold ml-4 md:ml-[101px]">Top Songs</h2>
-        <div className="ml-4 md:ml-[101px] mt-4">
-          {topTracks.map((track, index) => (
-            <div
-              key={track.id}
-              className="flex items-center justify-between p-2 mb-2 rounded-lg cursor-pointer hover:bg-[#520000] w-full"
-              onClick={() => setSelectedTrack(track)}
-            >
-              <span className="font-semibold">{index + 1}.</span>
-              <img src={track.album.images[0].url} alt={track.name} className="w-10 h-10 rounded-lg" />
-              <div className="flex-1 ml-2">
-                <p className="font-semibold">{track.name}</p>
-                <p className="text-gray-600">{track.artists.map(artist => artist.name).join(', ')}</p>
-              </div>
-              <span>{formatDuration(track.duration_ms)}</span>
-              <span className="text-gray-500">{track.album.name}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    {/* Sidebar with notifications and playlists */}
-    <div className="bg-white w-full md:w-[400px] h-auto md:h-full p-4">
-      <div className="bg-black p-4 mb-6 rounded-lg border-2 border-[#F6F6F6]">
-        <span className="text-[#CFC5C5] font-semibold">NOTIFICATIONS</span>
-      </div>
-      <div className="bg-green-400 p-4 rounded-lg border-2 border-[#F6F6F6]">
-        <span className="text-[#CFC5C5] font-semibold">RECENT PLAYLISTS</span>
-      </div>
-      {selectedTrack && <Songcard track={selectedTrack} />}
-    </div>
-  </div>
-</div>
-
     
   )
 }
