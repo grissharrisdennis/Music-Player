@@ -1,9 +1,9 @@
 import {createBrowserRouter} from "react-router-dom";
-import App from '../App'
+import Musicplayer from '../Musicplayer'
 const router = createBrowserRouter([
     {
       path: "/",
-      element: <App/>,
+      element: <Musicplayer/>,
       children:[
         // {
         //     path:'/',
