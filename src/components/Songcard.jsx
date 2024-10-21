@@ -88,55 +88,59 @@ const Songcard = ({ track }) => {
   };
 
   return (
-    <div className='container shadow-custom-shadow p-4 bg-[#6B0000] w-[284px] h-[376px] ml-[46px] mt-[673px]'>
-      <div className="absolute w-[284px] h-[21px] left-[1566px] ml-[21px] font-poppins font-semibold text-[14px] leading-[21px] flex items-center justify-center text-[#F6F6F6]">
-        Now Playing
+    <div className='container shadow-custom-shadow p-4 bg-[#6B0000] w-full max-w-[284px] h-auto ml-4 mt-8 sm:mt-[673px] sm:ml-[46px]'>
+    <div className="w-full text-center font-poppins font-semibold text-[14px] leading-[21px] text-[#F6F6F6]">
+      Now Playing
+    </div>
+  
+    <div className='w-full h-[136px] mt-4 sm:mt-[56px] border-[#6B0000] border-[10px]'>
+      <img src={track.album.images[0].url} alt={track.name} className="w-full h-full object-cover" />
+    </div>
+  
+    <div className='flex flex-col items-center mt-4'>
+      <span className='font-poppins text-[#F6F6F6] text-[18px] font-semibold leading-[27px] text-center'>{track.name}</span>
+      <span className='font-poppins text-[#CFC5C5] text-[13px] font-normal leading-[19.5px] text-center'>{track.artists.map(artist => artist.name).join(', ')}</span>
+    </div>
+  
+    {/* Live time display */}
+    <div className="flex justify-between items-center mt-4">
+      <span className="text-white">{formatTime(currentTime)}</span>
+      <span className="text-white">/ {formatTime(duration)}</span>
+    </div>
+  
+    {/* Progress bar */}
+    <div className="relative mt-2 w-full h-2 bg-gray-500 rounded-full">
+      <div
+        className="absolute top-0 left-0 h-full bg-white rounded-full"
+        style={{ width: `${calculateProgress()}%` }}
+      ></div>
+      {/* Moving icon */}
+      <div
+        className="absolute top-[-6px] h-[14px] w-[14px] bg-white rounded-full"
+        style={{ left: `calc(${calculateProgress()}% - 7px)` }}
+      ></div>
+    </div>
+  
+    {/* Controls */}
+    <div className="w-full h-[41px] mt-4 flex justify-between items-center">
+      <div onClick={() => howlInstance.seek(howlInstance.seek() - 5)} className="w-[20px] h-[20px] flex justify-center items-center cursor-pointer">
+        <img className="w-[20px] h-[20px]" src={reverse} alt="Reverse" />
       </div>
-      <div className='absolute ml-[22px] mt-[56px] border-[#6B0000] border-[10px] w-[239px] h-[136px]'>
-        <img src={track.album.images[0].url} alt={track.name} className="w-full h-full object-cover" />
+      <div onClick={() => howlInstance.seek(howlInstance.seek() - 10)} className="w-[29px] h-[29px] flex justify-center items-center cursor-pointer">
+        <img className="w-[29px] h-[29px]" src={previous} alt="Previous" />
       </div>
-      <div className='flex flex-col items-center w-full h-[47px] mt-[211px]'>
-        <span className='font-poppins text-[#F6F6F6] text-[18px] font-semibold leading-[27px] text-center'>{track.name}</span>
-        <span className='font-poppins text-[#CFC5C5] text-[13px] font-normal leading-[19.5px] text-center'>{track.artists.map(artist => artist.name).join(', ')}</span>
+      <div onClick={handlePlayPause} className="w-[41px] h-[41px] bg-[#480000] flex justify-center items-center cursor-pointer rounded-full">
+        <img className="w-[29px] h-[29px]" src={isPlaying ? pause : play} alt="Play" />
       </div>
-
-      {/* Live time display */}
-      <div className="flex justify-between items-center mt-4">
-        <span className="text-white">{formatTime(currentTime)}</span>
-        <span className="text-white">/ {formatTime(duration)}</span>
+      <div onClick={() => howlInstance.seek(howlInstance.seek() + 10)} className="w-[29px] h-[29px] flex justify-center items-center cursor-pointer">
+        <img className="w-[29px] h-[29px]" src={next} alt="Next" />
       </div>
-
-      {/* Progress bar */}
-      <div className="relative mt-2 w-full h-2 bg-gray-500 rounded-full">
-        <div
-          className="absolute top-0 left-0 h-full bg-white rounded-full"
-          style={{ width: `${calculateProgress()}%` }}
-        ></div>
-        {/* Moving icon */}
-        <div
-          className="absolute top-[-6px] h-[14px] w-[14px] bg-white rounded-full"
-          style={{ left: `calc(${calculateProgress()}% - 7px)` }}
-        ></div>
-      </div>
-
-      <div className="absolute w-[224px] h-[41px] left-[1596px] top-[995px] flex justify-between items-center">
-        <div onClick={() => howlInstance.seek(howlInstance.seek() - 5)} className="w-[20px] h-[20px] rounded-[10px] flex justify-center items-center cursor-pointer">
-          <img className="w-[20px] h-[20px]" src={reverse} alt="Reverse" />
-        </div>
-        <div onClick={() => howlInstance.seek(howlInstance.seek() - 10)} className="w-[29px] h-[29px] rounded-[10px] flex justify-center items-center cursor-pointer">
-          <img className="w-[29px] h-[29px]" src={previous} alt="Previous" />
-        </div>
-        <div onClick={handlePlayPause} className="w-[41px] h-[41px] bg-[#480000] rounded-[10px] flex justify-center items-center cursor-pointer">
-          <img className="w-[29px] h-[29px]" src={isPlaying ? pause : play} alt="Play" />
-        </div>
-        <div onClick={() => howlInstance.seek(howlInstance.seek() + 10)} className="w-[29px] h-[29px]  rounded-[10px] flex justify-center items-center cursor-pointer">
-          <img className="w-[29px] h-[29px]" src={next} alt="Next" />
-        </div>
-        <div onClick={() => console.log('Random track')} className="w-[20px] h-[20px]  rounded-[10px] flex justify-center items-center cursor-pointer">
-          <img className="w-[20px] h-[20px]" src={random} alt="Random" />
-        </div>
+      <div onClick={() => console.log('Random track')} className="w-[20px] h-[20px] flex justify-center items-center cursor-pointer">
+        <img className="w-[20px] h-[20px]" src={random} alt="Random" />
       </div>
     </div>
+  </div>
+  
   );
 };
 
