@@ -102,12 +102,13 @@ const Songcard = ({ track }) => {
 
       {/* Live time display */}
       <div className="flex justify-between items-center mt-4">
-        <span className="text-white">{formatTime(currentTime)}</span>
-        <span className="text-white">/ {formatTime(duration)}</span>
+        <span className="text-white text-[13px]
+        ">{formatTime(currentTime)}</span>
+        <span className="text-white text-[13px]">/ {formatTime(duration)}</span>
       </div>
 
       {/* Progress bar */}
-      <div className="relative mt-2 w-full h-2 bg-gray-500 rounded-full">
+      <div className="relative mt-1 w-full h-1 bg-gray-500 rounded-full">
         <div
           className="absolute top-0 left-0 h-full bg-white rounded-full"
           style={{ width: `${calculateProgress()}%` }}
