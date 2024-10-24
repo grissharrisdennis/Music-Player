@@ -8,6 +8,7 @@ import library from '../assets/library.svg';
 import logout from '../assets/logout.svg';
 import settings from '../assets/settings.svg';
 import trends from '../assets/trends.svg';
+import { Link } from 'react-router-dom';
 
 
 const Sidebar = () => {
@@ -26,7 +27,7 @@ const Sidebar = () => {
     </div>
 
     <div className='flex items-center mb-4'>
-      <img src={home} alt='home' className='ml-[1.66px]' />
+      <Link to='/'><img src={home} alt='home' className='ml-[1.66px]' /></Link>
       <span className='text-[#F6F6F6] ml-[10px] text-lg font-medium font-poppins hidden md:block'>Home</span> {/* Show text only on larger screens */}
     </div>
 

@@ -13,6 +13,7 @@ const router = createBrowserRouter([
             path:'/music',
             element:<div>dasdasdasdasd</div>
         },
+        
         {
             path:'/podcast',
             element:<div>dasdasdasdasd</div>

@@ -1,14 +1,18 @@
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar'
-import search from './assets/search.svg'
+import searchIcon from './assets/search.svg'
+import verifyIcon from './assets/verfiy.svg'
 import Songcard from './components/Songcard';
-
+import ErrorBoundary from './components/Errorb'
 
 
 const Musicplayer = () => {
 const [topTracks, setTopTracks] = useState([]);
-  const [selectedTrack, setSelectedTrack] = useState(null);
+const [selectedTrack, setSelectedTrack] = useState(null);
+
+const [searchQuery, setSearchQuery] = useState('');
+const [artistData, setArtistData] = useState(null);
 
   useEffect(() => {
     async function fetchTracks() {
@@ -40,7 +44,27 @@ const [topTracks, setTopTracks] = useState([]);
     setTopTracks(reorderedTracks); // Update state with the reordered tracks
   };
 
+  const handleSearch = async () => {
+    console.log(searchQuery)
+    try {
+      const response = await fetch(`http://localhost:3000/api/search?q=${searchQuery}`);
+      const data = await response.json();
+      console.log(data)
+      // if (data && data.tracks) {
+      //   setTopTracks(data.tracks);  // Assuming the response contains tracks in the 'tracks' field
+      // } else {
+      //   setTopTracks([]);  // In case no tracks are returned, ensure the state is not undefined
+      // }
+      setTopTracks(data.top_tracks);
+      setArtistData(data.artist)// Update top tracks with the fetched search result
+    } catch (error) {
+      console.error('Error searching for artist:', error);
+    }
+  };
+  
+
   return (
+    <ErrorBoundary>
     <div className="w-[1920px] h-[1080px]  overflow-hidden flex">
       <Sidebar/>
       <div className='w-[1484px] h-full flex'>
@@ -52,16 +76,46 @@ const [topTracks, setTopTracks] = useState([]);
                 <span className='font-poppins font-semibold text-[#E5DDDD] container text-lg'>Radio</span>
                
               </div>
-              <div className='absolute  mt-[32px] w-[513px] h-[54px] ml-[528px]'>
-                <div className='absolute w-full h-full bg-[#2C0000] rounded-full '>
-                  <div className='absolute ml-[465.42px] w-[22.96px] mt-[14.42px] h-[22.96px] border-[3px] border-[#F6F6F6]'>
-                  <img src={search} alt='search' />
-                  </div>
-                </div>
-              </div>
-          
-              <div className='absolute bg-zinc-500 w-[882px] h-[452px] ml-[101px] mt-[114px]'>
-              </div>
+              <div className='absolute mt-[32px] w-[513px] h-[54px] ml-[528px]'>
+  <div className='relative w-full h-full bg-[#2C0000] rounded-full'>
+    <input 
+      type="text" 
+      placeholder="Search for an artist..." 
+      className='w-full h-full bg-transparent text-white px-4 rounded-full outline-none' 
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)} 
+    />
+    <div 
+      className='absolute right-4 top-1/2 transform -translate-y-1/2 w-[22.96px] cursor-pointer h-[22.96px] border-[3px] flex items-center justify-center' 
+      onClick={handleSearch}
+    >
+      <img src={searchIcon} alt='search' className='w-full h-full' />
+    </div>
+  </div>
+</div>
+
+    <div className='absolute bg-[#2C0000] w-[882px] h-[452px] ml-[101px] mt-[114px]'>
+  {artistData && (
+    <div className='relative w-full h-full'>
+      <img 
+        src={artistData.image} 
+        alt={artistData.name} 
+        className='w-full h-full object-contain rounded-lg' 
+      />
+      <div className='absolute h-[30px] flex left-[49px] gap-2 bottom-[300px]'>
+        <img src={verifyIcon} className='w-[30px] h-[30px]'/>
+        <p className='font-poppins font-medium text-[#CFC5C5] text-sm'>Verified Artist</p>
+      </div>
+      <div className='absolute left-[49px] bottom-[250px]'>
+        <span className='font-poppins font-semibold text-lg text-[#F6F6F6] text-[40px]'>{artistData.name}</span>
+      </div>
+      <div className='absolute left-[49px] bottom-[220px]'>
+        <p className='font-poppins font-medium text-[#F6F6F6] text-sm'>{artistData.monthly_listeners} Total Followers</p>
+      </div>
+    </div>
+  )}
+</div>
+
               <div className=' w-full h-[447px] ml-0 mt-[606px]'>
                 <div className='flex flex-row w-[266px] h-[36px] ml-[101px]'>
                   <h2 className='text-xl text-white font-semibold'>Top Songs</h2>
@@ -122,9 +176,10 @@ const [topTracks, setTopTracks] = useState([]);
           </div>
       </div>
     </div>
+    </ErrorBoundary>
     
-    
-  )
+  );
 }
+
 
 export default Musicplayer;
